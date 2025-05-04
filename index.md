@@ -126,7 +126,7 @@ We hope this tool helps you seamlessly bring your cherished memories into Joynal
     - **Input:**
       ```
       ^May 1, 2024^
-      - Started reading a new book. Intriguing plot!
+      % Started reading a new book. Intriguing plot!
       Mood: 7/10
       
       ^Some notes from another app^
