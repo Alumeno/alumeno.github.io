@@ -9,30 +9,21 @@ Using an LLM offers incredible flexibility. The provided prompt is designed to b
 
 ## How to Use the Prompt:
 
-1. **Choose Your LLM:** We recommend using the most advanced LLM you have access to (e.g., Google Gemini Advanced, OpenAI ChatGPT-4, Anthropic Claude 3 Opus, xAI Grok). While our tests show excellent results with the prompt below across various formats, more capable models generally yield better outcomes, especially with complex or unusual diary structures.
-
-2. **Copy the Entire Prompt:** Select and copy the complete text of the *"Convert Diary Text to Joynal Import Format"* section below (starting from **"Convert Diary Text to Joynal Import Format"** down to the **"--- (User pastes their diary text below this line) ---"** line).
-
-3. **Paste into Your LLM:** Paste the copied prompt into the chat interface of your chosen LLM.
-
-4. **Paste Your Diary Text:** Immediately after pasting the prompt, paste the content of your diary TXT file directly below the prompt in the same LLM input field.
-
-5. **Generate:** Submit the combined text (prompt + your diary) to the LLM.
-
-6. **Review and Copy Output:** The LLM should generate the converted text in the Joynal import format. Carefully review the output to ensure it looks correct. Copy the entire generated output text.
-
-7. **Save as TXT:** Paste the copied output into a plain text editor (like TextEdit on Mac, Notepad on Windows, or any code editor) and save the file with a .txt extension (e.g., converted_diary.txt).
-
-8. **Import into Joynal:** Use the "Import Diary from TXT" function within the Joynal app (the folder-plus icon in the toolbar) and select the .txt file you just saved.
+1. **Prepare Your Diary as a TXT File:** Before you begin, ensure your existing diary entries are saved or exported as one or more plain text files (.txt). Most diary applications offer an export function, often to TXT or sometimes CSV (which can usually be opened and saved as TXT). If you only have your diary in a document format (like .docx or .pages), open it in a word processor and save it as Plain Text (.txt).
+2. **Choose Your LLM:** We recommend using the most advanced LLM you have access to (e.g., Google Gemini Advanced, OpenAI ChatGPT-4, Anthropic Claude 3 Opus, xAI Grok). While our tests show excellent results with the prompt below across various formats, more capable models generally yield better outcomes, especially with complex or unusual diary structures.
+3. **Copy the Entire Prompt:** Select and copy the complete text of the *"Convert Diary Text to Joynal Import Format"* section below (starting from **"Convert Diary Text to Joynal Import Format"** down to the **"--- (User pastes their diary text below this line) ---"** line).
+4. **Paste into Your LLM:** Paste the copied prompt into the chat interface of your chosen LLM.
+5. **Paste Your Diary Text:** Immediately after pasting the prompt, paste the content of your diary TXT file directly below the prompt in the same LLM input field.
+6. **Generate:** Submit the combined text (prompt + your diary) to the LLM.
+7. **Review and Copy Output:** The LLM should generate the converted text in the Joynal import format. Carefully review the output to ensure it looks correct. Copy the entire generated output text.
+8. **Save as TXT:** Paste the copied output into a plain text editor (like TextEdit on Mac, Notepad on Windows, or any code editor) and save the file with a .txt extension (e.g., converted_diary.txt).
+9. **Import into Joynal:** Use the "Import Diary from TXT" function within the Joynal app (the folder-plus icon in the toolbar) and select the .txt file you just saved.
 
 ## Important Notes & Troubleshooting:
 
 - **Success Not Guaranteed:** While this prompt is robust, variations in diary formats and LLM capabilities mean we cannot guarantee a 100% perfect conversion every time. If the result isn't satisfactory, consider:
-
 - **Tweaking the Prompt:** Slightly modify the instructions within the prompt (especially under "Processing Instructions") to give the LLM more specific guidance about your diary's unique formatting.
-
 - **Trying a Different LLM:** Sometimes, one LLM might handle a specific format better than another.
-
 - **Handling Long Diaries:** If your diary file is very large, the LLM might have trouble processing it all at once. You can:
     - **Split Your File:** Manually split your original diary into smaller TXT files (e.g., by year or month).
     - **Convert in Batches:** Convert each smaller file separately using the prompt.
