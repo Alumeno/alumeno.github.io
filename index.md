@@ -125,11 +125,11 @@ We hope this tool helps you seamlessly bring your cherished memories into Joynal
 - **Example 3: Mixed Formatting, Scattered Dates**
     - **Input:**
       ```
-      **May 1, 2024**
+      ^May 1, 2024^
       - Started reading a new book. Intriguing plot!
       Mood: 7/10
       
-      *Some notes from another app*
+      ^Some notes from another app^
       Date: 05/02/2024
       Worked on coding the new feature. Made good progress.
       
