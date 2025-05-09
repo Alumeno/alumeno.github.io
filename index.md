@@ -45,6 +45,7 @@ We hope this tool helps you seamlessly bring your cherished memories into Joynal
 - Be written in any language.
 - Contain timestamps along with dates (timestamps should be ignored).
 - May or may not include an explicit rating or mood for the day.
+- Individual diary entries or 'joys' within a day might have their own subtitles or headings.
 
 **Output Format Specification (Strict):** You must generate text adhering precisely to the following Joynal import format:
 1. **Entry Separator:** Each distinct date entry must be separated by exactly \n\n---JOYNAL---\n\n.
@@ -57,9 +58,14 @@ We hope this tool helps you seamlessly bring your cherished memories into Joynal
 4. **Joys Section:** A “joy” is a short story in a day’s diary entry. Most daily entries contain about three to five joys. Below the Date line (and Credits line, if present), include the joys section:
     - Start with: ::JOYS::\n (exactly like this, including the newline).
     - Each distinct "joy" or segment of the diary entry for that day should start with >J<  (note the space after <).
+    - Joy Titles: If a joy has an identifiable title, this title should be the first line of the joy's content, immediately following >J< . The title line must begin with # (a hash symbol followed by a space). For example:
+      ```
+      >J< # This is the Title
+      This is the body of the joy.
+      ```
     - Joys can span multiple lines. Preserve original line breaks within a joy.
     - Separate distinct joys within the same day with two newlines (\n\n).
-    - If a day's entry has no text content after processing, output (None)\n after ::JOYS::\n.
+    - If a day's entry has no text content after processing (e.g., after removing formatting markers, and it's not just a title), output (None)\n after ::JOYS::\n. If it only contains a title but no subsequent body, it's still considered content.
 
 ## Processing Instructions:
 1. **Date Recognition & Conversion:**
@@ -70,15 +76,27 @@ We hope this tool helps you seamlessly bring your cherished memories into Joynal
 2. **Content Handling & Joy Segmentation:**
     - Preserve Original Content: Do NOT modify, rephrase, summarize, or delete any of the user's original diary text content. Your only task is restructuring and adding the required tags.
     - Identify Formatting: Recognize common formatting markers (like *bold*, _italic_, # Heading, - list item, HTML tags, \section{}, \begin{}, etc.) or application-specific tags. Discard these markers; do not include them as part of the diary content within the >J< sections.
+    - Joy Title Handling: If an individual 札记 (joy) within a day's entry appears to have its own title (e.g., a short line of text formatted like a heading, or it's clearly a title for the subsequent paragraph(s) of that specific joy):
+        - This title should be extracted.
+        - In the output, this title becomes the first line of the joy's content, immediately following the >J<  prefix.
+        - The title line itself must start with #  (a hash symbol followed by a space). For example: # My Joy Title.
+        - Example structure for a titled joy:
+        ```
+        >J< # This is the Title of the Joy
+        This is the main body of the joy, starting after a blank line.
+        It can span multiple lines.
+        ```
+        - If no specific title is identified for a joy, it should be formatted as usual without the # prefix for a title.
     - Convert Bullet Points: If the original text contains bullet points (e.g., using -, *, •, or numbers like 1., a)), convert them into a numbered list using the format 1., 2., 3., etc. within the corresponding >J< section. Ensure proper indentation if the original list items span multiple lines.
     - Segment Joys (Best Effort): For unstructured text within a single day's entry:
         - Try to logically divide the text into separate "joys". Use paragraph breaks (\n\n) or significant topic shifts as primary cues for segmentation.
         - Prefix each identified segment with >J< .
+        - If a segment is identified as having a title, format it according to the "Joy Title Handling" rules above.
         - Separate these segments with \n\n.
-        - Fallback Rule: If segmenting the day's content into multiple joys is difficult or unclear, treat the entire text content for that day (after removing formatting markers) as a single joy prefixed with >J< .
+        - Fallback Rule: If segmenting the day's content into multiple joys is difficult or unclear, treat the entire text content for that day (after removing formatting markers and processing any potential overall title as a joy title) as a single joy prefixed with >J< .
 3. **Skip Empty Dates:** If a date is identified in the input but has no associated diary text content (after removing formatting markers and potential rating/mood lines), completely skip this date. Do not generate a ::DATE:: line or any other lines for it in the output.
 4. **Consolidate Dates:** If entries for the exact same date (yyyy/MM/dd) appear in different parts of the input text, merge all their content under the single corresponding ::DATE:: line in the output. Append the joys from later occurrences to the joys section of the first occurrence for that date, ensuring all content is preserved and correctly formatted with >J<  prefixes and \n\n separators. Do not overwrite content.
-5. **Language:** Keep the original language of the diary content within the >J< sections and the optional ::CREDITS:: line. Only the structural tags (::DATE::, ::CREDITS::, ::JOYS::, >J<, ---JOYNAL---) should be in English as specified.
+5. **Language:** Keep the original language of the diary content within the >J< sections and the optional ::CREDITS:: line. Only the structural tags (::DATE::, ::CREDITS::, ::JOYS::, >J<, ---JOYNAL---, and the # prefix for titles) should be in English as specified.
 
 ## Examples:
 - **Example 1: Simple English Entry**
@@ -120,7 +138,7 @@ We hope this tool helps you seamlessly bring your cherished memories into Joynal
       ::JOYS::
       >J< 今天效率很高，上午处理了很多邮件。下午和团队开了个会，讨论了下个季度的计划，感觉很有方向。晚上看了部电影，很放松。希望明天也这么顺利。
       ```
-      (Note: Treated as single joy due to lack of clear paragraph breaks/topic shifts)
+      (Note: Treated as single joy due to lack of clear paragraph breaks/topic shifts or explicit joy titles)
       
 - **Example 3: Mixed Formatting, Scattered Dates**
     - **Input:**
@@ -151,6 +169,37 @@ We hope this tool helps you seamlessly bring your cherished memories into Joynal
       ::DATE:: 2024/05/02
       ::JOYS::
       >J< Worked on coding the new feature. Made good progress.
+      ```
+
+- **Example 4: Entry with Titled Joys**
+    - **Input:**
+      ```
+      2025/05/01, Thursday
+      Overall Mood: B+
+        
+      My Morning Routine
+      Kicked off with a solid 3-hour review session for my hardest final (Advanced Algorithms 🤯). Covered more ground than expected and actually understood most of it 👍. Feeling cautiously optimistic 🤔.
+        
+      Quick Break
+      Took a real break – went for a run outside 🏃‍♂️🌳. Didn't time it, just ran until I felt looser. Fresh air is key 🌬️.
+        
+      Surprise!
+      CARE PACKAGE! 📦 Ben's parents sent a box overflowing with cookies 🍪, chips, instant coffee ☕, and other essential study snacks 🍫. He shared generously 🙏. Parental support units are the best 🥰.
+      ```
+
+    - **Output:**
+      ```
+      ::DATE:: 2025/05/01
+      ::CREDITS:: B+
+      ::JOYS::
+      >J< # My Morning Routine
+      Kicked off with a solid 3-hour review session for my hardest final (Advanced Algorithms 🤯). Covered more ground than expected and actually understood most of it 👍. Feeling cautiously optimistic 🤔.
+        
+      >J< # Quick Break
+      Took a real break – went for a run outside 🏃‍♂️🌳. Didn't time it, just ran until I felt looser. Fresh air is key 🌬️.
+        
+      >J< # Surprise!
+      CARE PACKAGE! 📦 Ben's parents sent a box overflowing with cookies 🍪, chips, instant coffee ☕, and other essential study snacks 🍫. He shared generously 🙏. Parental support units are the best 🥰.
       ```
 
 **Your Task Now:** Process the diary text provided below this line and generate ONLY the converted text in the specified Joynal import format. Do not include any explanations before or after the converted text.
